@@ -1,6 +1,9 @@
+import uuid
+import time
+import json
 import requests
 from bs4 import BeautifulSoup
-import json
+from datetime import datetime
 
 # 定義 headers
 headers = {
@@ -62,6 +65,7 @@ def main():
     with open('中央社詐騙新聞內容.json', 'r', encoding='utf-8') as f:
         loaded_news = json.load(f)
         print(json.dumps(loaded_news, ensure_ascii=False, indent=4))
+        
 
 if __name__ == "__main__":
     main()
