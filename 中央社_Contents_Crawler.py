@@ -22,6 +22,10 @@ def parse_article_links(html):
     articles = soup.select("#jsMainList a")
     return ["https://www.cna.com.tw" + a['href'] for a in articles]
 
+# 取得現在時間
+def get_current_time():
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
 def fetch_article_content(url):
     response = requests.get(url, headers=headers)
     if response.status_code != 200:
@@ -33,10 +37,24 @@ def fetch_article_content(url):
     date = date_tag.text.strip() if date_tag else "無時間"
     inner_text = soup.find("div", {"class": "paragraph"})
     if not inner_text:
-        return {"title": title, "date": date, "content": "無內文"}
+        return {
+            "id": str(uuid.uuid3(uuid.NAMESPACE_DNS, content_text)),
+            "title": title,
+						"date": date,
+						"content": "無內文",
+            "url": url,
+            "current_time": get_current_time()
+				}
     paragraphs = inner_text.find_all('p')
     content_text = " ".join(p.text for p in paragraphs)
-    return {"title": title, "date": date, "content": content_text}
+    return {
+        "id": str(uuid.uuid3(uuid.NAMESPACE_DNS, content_text)),
+        "title": title,
+				"date": date,
+				"content": content_text,
+        "url": url,
+        "current_time": get_current_time()
+  	}
 
 def main():
     search_url = "https://www.cna.com.tw/search/hysearchws.aspx?q=%E8%A9%90%E9%A8%99"
