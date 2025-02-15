@@ -65,12 +65,11 @@ def fetch_article_content(url):
                 "url": url,
                 "current_time": get_current_time()
             }
-        
-        paragraphs = inner_text.find_all('p')
-        if len(paragraphs) == 0:
-            paragraphs = inner_text.find_all("div", {"class": "data_left"})
 
-        # content_text = " ".join(re.sub('(\r|\n|\\s)','', p.text) for p in paragraphs)
+        paragraphs = inner_text.find_all("div", {"class": "data_left"})
+        if len(paragraphs) == 0:
+            paragraphs = inner_text.find_all('p')
+
         content_text = " ".join(re.sub(r'[\r\n\s]', '', p.text) for p in paragraphs)
         
         return {
@@ -109,13 +108,9 @@ def main():
 
         page += 1
 
-    with open('EY_新聞內容try.json', 'w', encoding='utf-8') as f:
+    with open('EY_新聞內容.json', 'w', encoding='utf-8') as f:
         json.dump(news, f, ensure_ascii=False, indent=4)
 
-    # with open('EY_新聞內容2.json', 'r', encoding='utf-8') as f:
-    #     loaded_news = json.load(f)
-    #     print(json.dumps(loaded_news, ensure_ascii=False, indent=4))
-        
     print(f"共爬取了 {len(news)} 篇文章，已存儲到 EY_新聞內容.json")
 
 if __name__ == "__main__":
